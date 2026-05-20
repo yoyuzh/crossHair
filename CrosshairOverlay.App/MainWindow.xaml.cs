@@ -107,6 +107,6 @@ public partial class MainWindow : Window
 
     private void OnExitClick(object sender, RoutedEventArgs e)
     {
-        Application.Current.Shutdown();
+        System.Windows.Application.Current.Shutdown();
     }
 }

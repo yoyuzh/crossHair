@@ -1,6 +1,10 @@
 using System.Windows;
 using System.Windows.Media;
 using CrosshairOverlay.App.Models;
+using MediaColor = System.Windows.Media.Color;
+using MediaColorConverter = System.Windows.Media.ColorConverter;
+using MediaPen = System.Windows.Media.Pen;
+using WpfPoint = System.Windows.Point;
 
 namespace CrosshairOverlay.App.Rendering;
 
@@ -35,7 +39,7 @@ public sealed class CrosshairRenderer : FrameworkElement
         color.A = (byte)Math.Round(255 * Settings.Opacity);
         var brush = new SolidColorBrush(color);
         brush.Freeze();
-        var pen = new Pen(brush, Settings.Thickness)
+        var pen = new MediaPen(brush, Settings.Thickness)
         {
             StartLineCap = PenLineCap.Round,
             EndLineCap = PenLineCap.Round
@@ -46,32 +50,34 @@ public sealed class CrosshairRenderer : FrameworkElement
 
         foreach (var line in geometry.Lines)
         {
-            drawingContext.DrawLine(pen, new Point(line.X1, line.Y1), new Point(line.X2, line.Y2));
+            drawingContext.DrawLine(pen, new WpfPoint(line.X1, line.Y1), new WpfPoint(line.X2, line.Y2));
         }
 
         foreach (var circle in geometry.Circles)
         {
             if (circle.Filled)
             {
-                drawingContext.DrawEllipse(brush, null, new Point(circle.CenterX, circle.CenterY), circle.Radius, circle.Radius);
+                drawingContext.DrawEllipse(brush, null, new WpfPoint(circle.CenterX, circle.CenterY), circle.Radius, circle.Radius);
             }
             else
             {
-                drawingContext.DrawEllipse(null, pen, new Point(circle.CenterX, circle.CenterY), circle.Radius, circle.Radius);
+                drawingContext.DrawEllipse(null, pen, new WpfPoint(circle.CenterX, circle.CenterY), circle.Radius, circle.Radius);
             }
         }
     }
 
-    private static bool TryParseColor(string value, out Color color)
+    private static bool TryParseColor(string value, out MediaColor color)
     {
         try
         {
-            var parsed = ColorConverter.ConvertFromString(value);
-            if (parsed is Color parsedColor)
+            var parsed = MediaColorConverter.ConvertFromString(value);
+            if (parsed is MediaColor parsedColor)
             {
                 color = parsedColor;
                 return true;
             }
+            color = Colors.Lime;
+            return false;
         }
         catch (FormatException)
         {

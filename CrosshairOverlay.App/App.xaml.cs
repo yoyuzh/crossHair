@@ -7,7 +7,7 @@ using CrosshairOverlay.App.Tray;
 
 namespace CrosshairOverlay.App;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     private ConfigService? configService;
     private OverlayWindow? overlayWindow;
@@ -24,7 +24,7 @@ public partial class App : Application
 
         if (ComplianceNotice.RequiresAcceptance(settings.ComplianceNoticeVersion, settings.ComplianceNoticeAccepted))
         {
-            var result = MessageBox.Show(
+            var result = System.Windows.MessageBox.Show(
                 ComplianceNotice.Body,
                 ComplianceNotice.Title,
                 MessageBoxButton.OKCancel,
@@ -57,7 +57,7 @@ public partial class App : Application
         var source = HwndSource.FromHwnd(new WindowInteropHelper(mainWindow).Handle);
         if (source is null)
         {
-            MessageBox.Show("Unable to initialize global hotkey window source.", "Crosshair Overlay", MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show("Unable to initialize global hotkey window source.", "Crosshair Overlay", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 

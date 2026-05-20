@@ -12,7 +12,7 @@ public sealed class TrayService : IDisposable
         var menu = new Forms.ContextMenuStrip();
         menu.Items.Add("Open Settings", null, (_, _) => ShowSettings(settingsWindow));
         menu.Items.Add("Toggle Crosshair", null, (_, _) => toggleOverlay());
-        menu.Items.Add("Exit", null, (_, _) => Application.Current.Shutdown());
+        menu.Items.Add("Exit", null, (_, _) => System.Windows.Application.Current.Shutdown());
 
         notifyIcon = new Forms.NotifyIcon
         {
