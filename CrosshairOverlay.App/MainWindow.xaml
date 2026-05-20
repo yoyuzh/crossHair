@@ -1,0 +1,87 @@
+<Window x:Class="CrosshairOverlay.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Crosshair Overlay"
+        Width="420"
+        Height="560"
+        MinWidth="380"
+        MinHeight="520"
+        WindowStartupLocation="CenterScreen">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24" Orientation="Vertical">
+            <TextBlock Text="Crosshair Overlay" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="Screen center marker. Borderless-windowed mode is recommended."
+                       Margin="0,4,0,20"
+                       Foreground="#666666" />
+
+            <CheckBox x:Name="EnabledCheckBox"
+                      Content="Enable crosshair"
+                      Margin="0,0,0,16"
+                      Checked="OnSettingChanged"
+                      Unchecked="OnSettingChanged" />
+
+            <TextBlock Text="Style" />
+            <ComboBox x:Name="StyleComboBox"
+                      Margin="0,4,0,16"
+                      SelectionChanged="OnSettingChanged" />
+
+            <TextBlock Text="Color" />
+            <TextBox x:Name="ColorTextBox"
+                     Margin="0,4,0,16"
+                     TextChanged="OnSettingChanged" />
+
+            <TextBlock Text="Size" />
+            <Slider x:Name="SizeSlider"
+                    Minimum="1"
+                    Maximum="50"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="OnSettingChanged" />
+
+            <TextBlock Text="Thickness" Margin="0,12,0,0" />
+            <Slider x:Name="ThicknessSlider"
+                    Minimum="1"
+                    Maximum="10"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="OnSettingChanged" />
+
+            <TextBlock Text="Gap" Margin="0,12,0,0" />
+            <Slider x:Name="GapSlider"
+                    Minimum="0"
+                    Maximum="30"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="OnSettingChanged" />
+
+            <TextBlock Text="Opacity" Margin="0,12,0,0" />
+            <Slider x:Name="OpacitySlider"
+                    Minimum="0.1"
+                    Maximum="1"
+                    TickFrequency="0.05"
+                    ValueChanged="OnSettingChanged" />
+
+            <Grid Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="X offset" />
+                    <TextBox x:Name="OffsetXTextBox" TextChanged="OnSettingChanged" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Y offset" />
+                    <TextBox x:Name="OffsetYTextBox" TextChanged="OnSettingChanged" />
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+                <Button Content="Save" Width="80" Margin="0,0,8,0" Click="OnSaveClick" />
+                <Button Content="Reset" Width="80" Margin="0,0,8,0" Click="OnResetClick" />
+                <Button Content="Exit" Width="80" Click="OnExitClick" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

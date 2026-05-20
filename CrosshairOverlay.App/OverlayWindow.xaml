@@ -1,0 +1,15 @@
+<Window x:Class="CrosshairOverlay.App.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rendering="clr-namespace:CrosshairOverlay.App.Rendering"
+        Title="Crosshair Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Focusable="False"
+        IsHitTestVisible="False">
+    <rendering:CrosshairRenderer x:Name="Renderer" />
+</Window>
