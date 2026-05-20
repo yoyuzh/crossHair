@@ -57,7 +57,7 @@ public partial class App : System.Windows.Application
         var source = HwndSource.FromHwnd(new WindowInteropHelper(mainWindow).Handle);
         if (source is null)
         {
-            System.Windows.MessageBox.Show("Unable to initialize global hotkey window source.", "Crosshair Overlay", MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show("无法初始化全局快捷键窗口源。", "外置准星", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 

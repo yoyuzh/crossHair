@@ -9,9 +9,22 @@ namespace CrosshairOverlay.App;
 
 public partial class MainWindow : Window
 {
+    private sealed record StyleOption(CrosshairStyle Value, string Label)
+    {
+        public override string ToString() => Label;
+    }
+
     private readonly ConfigService configService;
     private readonly OverlayWindow overlayWindow;
     private readonly Action? hotkeysChanged;
+    private readonly StyleOption[] styleOptions =
+    [
+        new(CrosshairStyle.CrossDot, "十字 + 圆点"),
+        new(CrosshairStyle.Dot, "圆点"),
+        new(CrosshairStyle.Cross, "十字"),
+        new(CrosshairStyle.Circle, "圆环")
+    ];
+
     private bool loading;
     private CrosshairSettings settings;
 
@@ -23,8 +36,7 @@ public partial class MainWindow : Window
         this.settings = settings;
         this.hotkeysChanged = hotkeysChanged;
 
-        StyleComboBox.ItemsSource = Enum.GetValues(typeof(CrosshairStyle));
-        ProfileComboBox.ItemsSource = Enumerable.Range(1, 4).Select(i => $"Profile {i}").ToArray();
+        StyleComboBox.ItemsSource = styleOptions;
         LoadControls(settings);
         ApplySettings();
     }
@@ -58,10 +70,11 @@ public partial class MainWindow : Window
     private void LoadControls(CrosshairSettings value)
     {
         loading = true;
+        RefreshProfileList(value.ActiveProfileIndex);
         ProfileComboBox.SelectedIndex = value.ActiveProfileIndex;
         ProfileNameTextBox.Text = value.Profiles[value.ActiveProfileIndex].Name;
         EnabledCheckBox.IsChecked = value.Enabled;
-        StyleComboBox.SelectedItem = value.Style;
+        StyleComboBox.SelectedItem = styleOptions.FirstOrDefault(option => option.Value == value.Style);
         SetColorControls(value.Color);
         SizeSlider.Value = value.Size;
         ThicknessSlider.Value = value.Thickness;
@@ -103,7 +116,7 @@ public partial class MainWindow : Window
     private void ReadControls()
     {
         settings.Enabled = EnabledCheckBox.IsChecked == true;
-        settings.Style = StyleComboBox.SelectedItem is CrosshairStyle style ? style : CrosshairStyle.CrossDot;
+        settings.Style = StyleComboBox.SelectedItem is StyleOption option ? option.Value : CrosshairStyle.CrossDot;
         settings.Color = CurrentColorHex();
         settings.Size = SizeSlider.Value;
         settings.Thickness = ThicknessSlider.Value;
@@ -235,8 +248,9 @@ public partial class MainWindow : Window
         }
 
         settings.Profiles[settings.ActiveProfileIndex].Name = string.IsNullOrWhiteSpace(ProfileNameTextBox.Text)
-            ? $"Profile {settings.ActiveProfileIndex + 1}"
+            ? $"方案 {settings.ActiveProfileIndex + 1}"
             : ProfileNameTextBox.Text.Trim();
+        RefreshProfileList(settings.ActiveProfileIndex);
     }
 
     private void OnHotkeyChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -262,6 +276,15 @@ public partial class MainWindow : Window
             ? settings.Profiles[settings.ActiveProfileIndex].Name
             : ProfileNameTextBox.Text.Trim();
         settings.Profiles[settings.ActiveProfileIndex] = CrosshairProfile.FromSettings(settings, name);
+    }
+
+    private void RefreshProfileList(int selectedIndex)
+    {
+        var wasLoading = loading;
+        loading = true;
+        ProfileComboBox.ItemsSource = settings.Profiles.Select(profile => profile.Name).ToArray();
+        ProfileComboBox.SelectedIndex = Math.Clamp(selectedIndex, 0, settings.Profiles.Count - 1);
+        loading = wasLoading;
     }
 
     private static bool TryParseHexColor(string value, out MediaColor color)

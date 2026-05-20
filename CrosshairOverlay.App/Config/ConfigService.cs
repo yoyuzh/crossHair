@@ -103,7 +103,11 @@ public sealed class ConfigService
         for (var i = 0; i < 4; i++)
         {
             var profile = i < profiles.Count && profiles[i] is not null ? profiles[i] : defaults[i];
-            profile.Name = string.IsNullOrWhiteSpace(profile.Name) ? $"Profile {i + 1}" : profile.Name;
+            if (string.IsNullOrWhiteSpace(profile.Name) || profile.Name == $"Profile {i + 1}")
+            {
+                profile.Name = $"方案 {i + 1}";
+            }
+
             profile.Color = string.IsNullOrWhiteSpace(profile.Color) ? defaults[i].Color : profile.Color;
             profile.Size = Clamp(profile.Size, 1, 100);
             profile.Thickness = Clamp(profile.Thickness, 1, 20);

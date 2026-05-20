@@ -10,13 +10,13 @@ public sealed class TrayService : IDisposable
     public TrayService(Window settingsWindow, Action toggleOverlay)
     {
         var menu = new Forms.ContextMenuStrip();
-        menu.Items.Add("Open Settings", null, (_, _) => ShowSettings(settingsWindow));
-        menu.Items.Add("Toggle Crosshair", null, (_, _) => toggleOverlay());
-        menu.Items.Add("Exit", null, (_, _) => System.Windows.Application.Current.Shutdown());
+        menu.Items.Add("打开设置", null, (_, _) => ShowSettings(settingsWindow));
+        menu.Items.Add("显示/隐藏准星", null, (_, _) => toggleOverlay());
+        menu.Items.Add("退出", null, (_, _) => System.Windows.Application.Current.Shutdown());
 
         notifyIcon = new Forms.NotifyIcon
         {
-            Text = "Crosshair Overlay",
+            Text = "外置准星",
             Icon = System.Drawing.SystemIcons.Application,
             ContextMenuStrip = menu,
             Visible = true

@@ -18,10 +18,10 @@ public sealed class CrosshairSettings
     public int ActiveProfileIndex { get; set; }
     public List<CrosshairProfile> Profiles { get; set; } =
     [
-        new() { Name = "Profile 1", Style = CrosshairStyle.CrossDot, Color = "#00FF00", Size = 16, Thickness = 2, Gap = 4, Opacity = 0.9 },
-        new() { Name = "Profile 2", Style = CrosshairStyle.Dot, Color = "#FFFFFF", Size = 16, Thickness = 3, Gap = 4, Opacity = 0.9 },
-        new() { Name = "Profile 3", Style = CrosshairStyle.Cross, Color = "#FFCC00", Size = 18, Thickness = 2, Gap = 5, Opacity = 0.9 },
-        new() { Name = "Profile 4", Style = CrosshairStyle.Circle, Color = "#0A84FF", Size = 14, Thickness = 2, Gap = 4, Opacity = 0.85 }
+        new() { Name = "方案 1", Style = CrosshairStyle.CrossDot, Color = "#00FF00", Size = 16, Thickness = 2, Gap = 4, Opacity = 0.9 },
+        new() { Name = "方案 2", Style = CrosshairStyle.Dot, Color = "#FFFFFF", Size = 16, Thickness = 3, Gap = 4, Opacity = 0.9 },
+        new() { Name = "方案 3", Style = CrosshairStyle.Cross, Color = "#FFCC00", Size = 18, Thickness = 2, Gap = 5, Opacity = 0.9 },
+        new() { Name = "方案 4", Style = CrosshairStyle.Circle, Color = "#0A84FF", Size = 14, Thickness = 2, Gap = 4, Opacity = 0.85 }
     ];
     public bool ComplianceNoticeAccepted { get; set; }
     public string ComplianceNoticeVersion { get; set; } = Compliance.ComplianceNotice.Version;

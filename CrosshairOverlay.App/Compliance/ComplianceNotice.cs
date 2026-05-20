@@ -3,7 +3,7 @@ namespace CrosshairOverlay.App.Compliance;
 public static class ComplianceNotice
 {
     public const string Version = "2026-05-20";
-    public const string Title = "Crosshair Overlay 使用提示";
+    public const string Title = "外置准星使用提示";
     public const string AcceptText = "我已了解";
     public const string ExitText = "退出";
 

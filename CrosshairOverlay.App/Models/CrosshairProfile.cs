@@ -2,7 +2,7 @@ namespace CrosshairOverlay.App.Models;
 
 public sealed class CrosshairProfile
 {
-    public string Name { get; set; } = "Profile";
+    public string Name { get; set; } = "方案";
     public CrosshairStyle Style { get; set; } = CrosshairStyle.CrossDot;
     public double Size { get; set; } = 16;
     public double Thickness { get; set; } = 2;

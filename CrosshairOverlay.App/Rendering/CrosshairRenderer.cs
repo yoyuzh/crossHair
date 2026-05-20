@@ -17,17 +17,30 @@ public sealed class CrosshairRenderer : FrameworkElement
             typeof(CrosshairRenderer),
             new FrameworkPropertyMetadata(CrosshairSettings.CreateDefault(), FrameworkPropertyMetadataOptions.AffectsRender));
 
+    public static readonly DependencyProperty IgnoreEnabledProperty =
+        DependencyProperty.Register(
+            nameof(IgnoreEnabled),
+            typeof(bool),
+            typeof(CrosshairRenderer),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
+
     public CrosshairSettings Settings
     {
         get => (CrosshairSettings)GetValue(SettingsProperty);
         set => SetValue(SettingsProperty, value);
     }
 
+    public bool IgnoreEnabled
+    {
+        get => (bool)GetValue(IgnoreEnabledProperty);
+        set => SetValue(IgnoreEnabledProperty, value);
+    }
+
     protected override void OnRender(DrawingContext drawingContext)
     {
         base.OnRender(drawingContext);
 
-        if (!Settings.Enabled)
+        if (!Settings.Enabled && !IgnoreEnabled)
         {
             return;
         }
