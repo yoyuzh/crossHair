@@ -12,6 +12,10 @@ internal static class Win32
     public const int WmNchittest = 0x0084;
     public const int Httransparent = -1;
     public const int WmHotkey = 0x0312;
+    public const uint ModAlt = 0x0001;
+    public const uint ModControl = 0x0002;
+    public const uint ModShift = 0x0004;
+    public const uint ModWin = 0x0008;
     public const uint ModNorepeat = 0x4000;
     public const uint VkF8 = 0x77;
 

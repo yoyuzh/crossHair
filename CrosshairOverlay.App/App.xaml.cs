@@ -46,7 +46,7 @@ public partial class App : System.Windows.Application
         overlayWindow.Show();
         overlayWindow.ApplySettings(settings);
 
-        mainWindow = new MainWindow(configService, overlayWindow, settings);
+        mainWindow = new MainWindow(configService, overlayWindow, settings, RegisterHotkeys);
         mainWindow.Closing += (_, args) =>
         {
             args.Cancel = true;
@@ -62,10 +62,20 @@ public partial class App : System.Windows.Application
         }
 
         hotkeyService = new HotkeyService(source);
-        hotkeyService.ToggleRequested += (_, _) => mainWindow.ToggleOverlay();
-        hotkeyService.RegisterToggleHotkey();
+        RegisterHotkeys();
 
         trayService = new TrayService(mainWindow, mainWindow.ToggleOverlay);
+    }
+
+    private void RegisterHotkeys()
+    {
+        if (hotkeyService is null || mainWindow is null || configService is null)
+        {
+            return;
+        }
+
+        var settings = configService.Load();
+        hotkeyService.RegisterHotkeys(settings, mainWindow.ToggleOverlay, mainWindow.SelectNextProfile, mainWindow.SelectProfile);
     }
 
     protected override void OnExit(ExitEventArgs e)

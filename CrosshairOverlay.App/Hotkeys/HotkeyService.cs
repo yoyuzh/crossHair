@@ -5,9 +5,9 @@ namespace CrosshairOverlay.App.Hotkeys;
 
 public sealed class HotkeyService : IDisposable
 {
-    private const int ToggleHotkeyId = 1;
     private readonly HwndSource source;
-    private bool registered;
+    private readonly Dictionary<int, Action> actions = [];
+    private readonly HashSet<int> registeredIds = [];
 
     public HotkeyService(HwndSource source)
     {
@@ -15,28 +15,57 @@ public sealed class HotkeyService : IDisposable
         source.AddHook(WndProc);
     }
 
-    public event EventHandler? ToggleRequested;
-
-    public void RegisterToggleHotkey()
+    public void RegisterHotkeys(CrosshairOverlay.App.Models.CrosshairSettings settings, Action toggleOverlay, Action nextProfile, Action<int> selectProfile)
     {
-        registered = Win32.RegisterHotKey(source.Handle, ToggleHotkeyId, Win32.ModNorepeat, Win32.VkF8);
+        ClearRegistrations();
+
+        Register(1, settings.ToggleHotkey, toggleOverlay);
+        Register(2, settings.NextProfileHotkey, nextProfile);
+        for (var i = 0; i < 4; i++)
+        {
+            var index = i;
+            var hotkey = i < settings.ProfileHotkeys.Length ? settings.ProfileHotkeys[i] : string.Empty;
+            Register(10 + i, hotkey, () => selectProfile(index));
+        }
     }
 
     public void Dispose()
     {
         source.RemoveHook(WndProc);
-        if (registered)
+        ClearRegistrations();
+    }
+
+    private void Register(int id, string hotkey, Action action)
+    {
+        if (!HotkeyGesture.TryParse(hotkey, out var gesture))
         {
-            Win32.UnregisterHotKey(source.Handle, ToggleHotkeyId);
+            return;
         }
+
+        if (Win32.RegisterHotKey(source.Handle, id, gesture.Modifiers, gesture.VirtualKey))
+        {
+            registeredIds.Add(id);
+            actions[id] = action;
+        }
+    }
+
+    private void ClearRegistrations()
+    {
+        foreach (var id in registeredIds)
+        {
+            Win32.UnregisterHotKey(source.Handle, id);
+        }
+
+        registeredIds.Clear();
+        actions.Clear();
     }
 
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
-        if (msg == Win32.WmHotkey && wParam.ToInt32() == ToggleHotkeyId)
+        if (msg == Win32.WmHotkey && actions.TryGetValue(wParam.ToInt32(), out var action))
         {
             handled = true;
-            ToggleRequested?.Invoke(this, EventArgs.Empty);
+            action();
         }
 
         return IntPtr.Zero;
